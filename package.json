@@ -1,0 +1,13 @@
+{
+    "name": "resumable",
+    "version": "1.0.0",
+    "description": "",
+    "scripts": {
+        "start": "ws --spa index.html"
+    },
+    "author": "",
+    "license": "ISC",
+    "dependencies": {
+        "local-web-server": "^5.2.1"
+    }
+}

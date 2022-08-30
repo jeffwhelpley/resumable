@@ -1,0 +1,62 @@
+<!doctype html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Resumability Example</title>
+    </head>
+    <body>
+        <h1>Hello, World</h1>
+
+        <button on:click="/handleButtonClick.js">Click me</button>
+
+        <script>
+            (() => {
+                document.addEventListener("DOMContentLoaded", domLoaded);
+
+                function domLoaded() {
+                    const eventTypes = ["click", "mouseover", "mouseout"];
+                    for (const eventType of eventTypes) {
+                        document.addEventListener(eventType, dispatchEventToTargets);
+                    }   
+                }
+
+                function dispatchEventToTargets(evt) {
+                    let target = evt.target;
+                    while (target) {
+                        if (target.hasAttribute("on:" + evt.type)) {
+                            handleEvent(evt, target);
+                        }
+                        target = target.parendNode;
+                    }
+                }
+
+                async function handleEvent(evt, target) {
+                    const scriptUrl = target.getAttribute("on:" + evt.type);
+                    const eventHandlerExists = window.eventHandlers && window.eventHandlers[scriptUrl];
+                    
+                    if (!eventHandlerExists) {
+                        await downloadAndRunJavaScript(scriptUrl);
+                    }
+
+                    window.eventHandlers[scriptUrl](evt, target);
+                }
+
+                async function downloadAndRunJavaScript(scriptUrl) {
+                    const newScriptElem = document.createElement("script");
+                    newScriptElem.type = "text/javascript";
+                    newScriptElem.async = true;
+                    newScriptElem.src = "/assets" + scriptUrl;
+
+                    const oldScriptElem = document.getElementsByTagName("script")[0];
+                    oldScriptElem.parentNode.insertBefore(newScriptElem, oldScriptElem);
+
+                    while(!window.eventHandlers || !window.eventHandlers[scriptUrl]) {
+                        await new Promise(resolve => setTimeout(resolve, 10));
+                    }
+                }
+            })();
+        </script>
+    </body>
+</html>
+
+
