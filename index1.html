@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <title>Resumability Example</title>
+    <style>
+        #todolist span {
+            color: red;
+            margin-left: 5px;
+            cursor: pointer;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>ToDos</h1>
+
+    <ul id="todolist">
+        <li>Walk the dog <span>X</span></li>
+        <li>Make dinner <span>X</span></li>
+        <li>Finish my DevReach presentation <span>X</span></li>
+    </ul>
+
+    <div>
+        <input id="newitem" type="text">
+        <button on:click="/standaloneComponentName.js#eventHandlerName">Add</button>
+    </div>
+</body>
+
+</html>
+
+
